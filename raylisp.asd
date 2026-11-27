@@ -1,0 +1,31 @@
+(asdf:defsystem "raylisp"
+  :description "Beginner-friendly bindings for drawing with raylib 6.2"
+  :depends-on ("cffi-libffi")
+  :in-order-to ((asdf:test-op (asdf:test-op "raylisp/tests")))
+  :serial t
+  :components ((:file "bindings")
+               (:file "api")
+               (:file "macros")
+               (:file "demo/mouse")
+               (:file "demo/camera")
+               (:file "demo/shapes")
+               (:file "demo/input")
+               (:file "demo/macros")
+               (:file "demo/api-guide")
+               (:file "demo/core")
+               (:file "demo/shapes-2d")
+               (:file "demo/fonts")
+               (:file "demo/shapes-3d")
+               (:file "demo/controllers")))
+
+(asdf:defsystem "raylisp/tests"
+  :depends-on ("raylisp")
+  :components ((:file "tests/api")
+               (:file "tests/coverage" :depends-on ("tests/api"))
+               (:file "tests/macros" :depends-on ("tests/api")))
+  :perform (asdf:test-op (operation system)
+             (declare (ignore operation system))
+             (uiop:symbol-call :raylisp/tests :run)
+             (uiop:symbol-call :raylisp/tests :check-coverage)
+             (uiop:symbol-call :raylisp/tests :check-media)
+             (uiop:symbol-call :raylisp/tests :check-macros)))
