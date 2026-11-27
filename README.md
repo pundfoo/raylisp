@@ -2,6 +2,8 @@
 
 Common Lisp bindings for all 619 public functions in the main header of [raylib 6.2](https://github.com/raysan5/raylib/releases/tag/6.2).
 
+[Read the Raylisp manual](https://pundfoo.github.io/raylisp/). To build it locally with Racket, run `mkdir -p /tmp/raylisp-manual && raco scribble --html --dest /tmp/raylisp-manual docs/index.scrbl` and open `/tmp/raylisp-manual/index.html`.
+
 ## Run the example
 
 An existing Homebrew installation of raylib is sufficient. The loader checks the standard Homebrew locations on Linux and macOS. If needed, install raylib with `brew install raylib` or download the shared library from the linked release. Quicklisp supplies the Lisp dependencies. On Linux, install the libffi development package and a C compiler for CFFI (on Debian or Ubuntu, `libffi-dev` and `build-essential`).

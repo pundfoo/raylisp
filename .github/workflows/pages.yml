@@ -1,0 +1,43 @@
+name: Publish Scribble manual
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install Racket
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends racket
+      - name: Render manual
+        run: |
+          mkdir -p site
+          raco scribble --html --dest site docs/index.scrbl
+          test -s site/index.html
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.publish.outputs.page_url }}
+    steps:
+      - id: publish
+        uses: actions/deploy-pages@v4
