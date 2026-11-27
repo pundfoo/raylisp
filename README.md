@@ -2,7 +2,7 @@
 
 Common Lisp bindings for all 619 public functions in the main header of [raylib 6.2](https://github.com/raysan5/raylib/releases/tag/6.2).
 
-[Read the Raylisp manual](https://pundfoo.github.io/raylisp/). To build it locally with Racket, run `mkdir -p /tmp/raylisp-manual && raco scribble --html --dest /tmp/raylisp-manual docs/index.scrbl` and open `/tmp/raylisp-manual/index.html`.
+[Read the Raylisp manual](https://pund.foo/raylisp/). To build it locally with Racket, run `mkdir -p /tmp/raylisp-manual && raco scribble --html --dest /tmp/raylisp-manual docs/index.scrbl` and open `/tmp/raylisp-manual/index.html`.
 
 ## Run the example
 
