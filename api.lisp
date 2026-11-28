@@ -2,8 +2,22 @@
 
 ;;; Window, drawing and input
 
-(cffi:defcfun ("InitWindow" init-window) :void (width :int) (height :int) (title :string))
-(cffi:defcfun ("CloseWindow" close-window) :void)
+(defmacro with-window-float-environment (&body body)
+  ;; Cocoa and the OpenGL driver expect the usual non-trapping C environment.
+  #+(and sbcl darwin)
+  `(sb-int:with-float-traps-masked (:invalid :overflow :divide-by-zero :underflow :inexact)
+     ,@body)
+  #-(and sbcl darwin)
+  `(progn ,@body))
+
+(cffi:defcfun ("InitWindow" %init-window) :void (width :int) (height :int) (title :string))
+(defun init-window (width height title)
+  (with-window-float-environment (%init-window width height title)))
+
+(cffi:defcfun ("CloseWindow" %close-window) :void)
+(defun close-window ()
+  (with-window-float-environment (%close-window)))
+
 (cffi:defcfun ("WindowShouldClose" window-should-close-p) (:boolean :uint8))
 (cffi:defcfun ("SetTargetFPS" set-target-fps) :void (fps :int))
 
@@ -11,7 +25,9 @@
 (cffi:defcfun ("GetMouseY" get-mouse-y) :int)
 
 (cffi:defcfun ("BeginDrawing" begin-drawing) :void)
-(cffi:defcfun ("EndDrawing" end-drawing) :void)
+(cffi:defcfun ("EndDrawing" %end-drawing) :void)
+(defun end-drawing ()
+  (with-window-float-environment (%end-drawing)))
 (cffi:defcfun ("ClearBackground" clear-background) :void (color (:struct rgba)))
 (cffi:defcfun ("DrawText" draw-text) :void
   (text :string) (x :int) (y :int) (font-size :int) (color (:struct rgba)))
